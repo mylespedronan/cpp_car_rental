@@ -1,0 +1,33 @@
+Notes:
+https://github.com/nlohmann/json
+https://kezunlin.me/post/f3c3eb8/
+
+
+
+
+  j["pi"] = 3.14;
+  j["happy"] = true;
+  j["name"] = "Niels";
+  j["nothin"] = nullptr;
+  j["answer"]["everything"] = 42;
+  j["list"] = {1, 0, 4, 2};
+  j["object"] = { {"currency", "USD"}, {"value", "42.99"} };
+
+  std::ofstream jsonOutput("test.json");
+  jsonOutput << std::setw(4) << j << std::endl;
+
+  std::ifstream jsonInput("test.json");
+  jsonInput >> k;
+
+  std::cout << k << std::endl;
+
+  std::cout << k["object"] << std::endl;
+  std::cout << k["list"] << std::endl;
+  std::cout << k["answer"] << std::endl;
+  std::cout << k["answer"]["everything"] << std::endl;
+
+  std::cout << k["pi"] << std::endl;
+  
+  k["pi"] = 3.141592654;
+
+  std::cout << k["pi"] << std::endl;

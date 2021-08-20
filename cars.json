@@ -1,0 +1,18 @@
+[
+    {
+        "avail": true,
+        "carID": 0,
+        "con": true,
+        "cost": 13000,
+        "model": "toyota",
+        "year": 1993
+    },
+    {
+        "avail": true,
+        "carID": 1,
+        "con": false,
+        "cost": 7000,
+        "model": "subaru",
+        "year": 2003
+    }
+]
