@@ -14,5 +14,13 @@
         "cost": 7000,
         "model": "subaru",
         "year": 2003
+    },
+    {
+        "avail": false,
+        "carID": 2,
+        "con": false,
+        "cost": 12000,
+        "model": "honda",
+        "year": 1993
     }
 ]
