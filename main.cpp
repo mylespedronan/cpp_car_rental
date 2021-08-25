@@ -3,10 +3,9 @@
 #include "json.hpp"
 #include <string>
 #include <iomanip>
+#include <limits.h>
 
 using json = nlohmann::json;
-
-//int carID, newCost;
 
 json listCars(){
   json car;
@@ -99,7 +98,7 @@ void addCar(){
     addCar();
 
     return;
-  } else if (carCost < 0){
+  } else if (carCost < 0 || carCost > INT_MAX){
     std::cout << "Invalid Cost. Please try again.\n" << std::endl;
     addCar();
 
@@ -133,7 +132,7 @@ int menu(){
   std::cout << "4. List All Cars" << std::endl;
   std::cout << "5. Check a Car" << std::endl;
   std::cout << "6. Rent a Car" << std::endl;
-  std::cout << "7. Modify Rent Records" << std::endl;
+  std::cout << "7. Return a Car" << std::endl;
   std::cout << "8. Exit Program" << "\n" << std::endl;
   std::cout << "Your Choice: ";
   std::cin >> ch;
@@ -159,7 +158,8 @@ int updateMenu(){
   std::cout << "3. Update Car Condition" << std::endl;
   std::cout << "4. Update Car Cost" << std::endl;
   std::cout << "5. Update Car Availability" << std::endl;
-  std::cout << "6. Return To Previous Menu" << std::endl;
+  std::cout << "6. Change Car to Update" << std::endl;
+  std::cout << "7. Return to Previous Menu" << std::endl;
   std::cout << "\n" << "Your choice: ";
   std::cin >> updateChoice;
   std::cout << "\n";
@@ -198,7 +198,7 @@ void updateCarModel(json cars, int i){
   cars[i]["model"] = carModel;  
   updateCarsJSON(cars);
 
-  std::cout << "Car model successfully updated." << std::endl;
+  std::cout << "Car model successfully updated.\n" << std::endl;
 }
 
 void updateCarYear(json cars, int i){
@@ -224,7 +224,7 @@ void updateCarYear(json cars, int i){
   cars[i]["year"] = carYear;
   updateCarsJSON(cars);
 
-  std::cout << "Car year successfully updated." << std::endl;
+  std::cout << "Car year successfully updated.\n" << std::endl;
 }
 
 void updateCarCondition(json cars, int i){
@@ -245,7 +245,7 @@ void updateCarCondition(json cars, int i){
   cars[i]["con"] = carCon;
   updateCarsJSON(cars);
 
-  std::cout << "Car condition successfully updated." << std::endl;
+  std::cout << "Car condition successfully updated.\n" << std::endl;
 }
 
 void updateCarCost(json cars, int i){
@@ -261,7 +261,7 @@ void updateCarCost(json cars, int i){
     updateCarCost(cars, i);
 
     return;
-  } else if (carCost < 0){
+  } else if (carCost < 0 || carCost > INT_MAX){
     std::cout << "Invalid Cost. Please try again.\n" << std::endl;
     updateCarCost(cars, i);
 
@@ -271,7 +271,7 @@ void updateCarCost(json cars, int i){
   cars[i]["cost"] = carCost;
   updateCarsJSON(cars);
 
-  std::cout << "Car cost successfully updated." << std::endl;
+  std::cout << "Car cost successfully updated.\n" << std::endl;
 }
 
 void updateCarAvail(json cars, int i){
@@ -292,69 +292,72 @@ void updateCarAvail(json cars, int i){
   cars[i]["avail"] = avail;
   updateCarsJSON(cars);
 
-  std::cout << "Car availability successfully updated." << std::endl;
+  std::cout << "Car availability successfully updated.\n" << std::endl;
 }
 
 void updateCar(int carID){
   json cars;
-  // std::string carModel;
-  // int carYear;
-  // int carCost;
-  // bool avail;
   int numOfCars, updateChoice;
   bool isFound;
-  // bool carCon;
 
   isFound = false;
   cars = listCars();
   numOfCars = cars.size();
 
-  for(int i = 0; i < numOfCars; i++){
-    if(cars[i]["carID"] == carID){
-      updateChoice = updateMenu();
+  if(carID < (numOfCars)){
+    for(int i = 0; i < numOfCars; i++){
+      if(cars[i]["carID"] == carID){
+        updateChoice = updateMenu();
 
-      switch(updateChoice){
-        case 1:
-          updateCarModel(cars, i);
+        switch(updateChoice){
+          case 1:
+            updateCarModel(cars, i);
 
-          break;
-        case 2:
-          updateCarYear(cars, i);
+            break;
+          case 2:
+            updateCarYear(cars, i);
 
-          break;
-        case 3:
-          updateCarCondition(cars, i);
+            break;
+          case 3:
+            updateCarCondition(cars, i);
 
-          break;
-        case 4:
-          updateCarCost(cars, i);
+            break;
+          case 4:
+            updateCarCost(cars, i);
 
-          break;
-        case 5:
-          updateCarAvail(cars, i);
+            break;
+          case 5:
+            updateCarAvail(cars, i);
 
-          break;
-        case 6:
-          return;
+            break;
+          case 6:
+            int tempID;
 
-          break;
-        default:
-          std::cout << "Input is out of range. Please try again." << std::endl;
+            std::cout << "Enter a new Car ID: ";
+            std::cin >> tempID;
+            std::cout << std::endl;
 
-          break;
+            if(std::cin.fail()){
+              std::cout << "Invalid input. Please try again.\n" << std::endl;
+              std::cin.clear();
+              std::cin.ignore(10000, '\n');
+            } else {
+              carID = tempID;
+            }
+            
+            break;
+          case 7:
+            return;
+
+            break;
+          default:
+            std::cout << "Input is out of range. Please try again." << std::endl;
+
+            break;
+        }
+        
+        isFound = true;
       }
-
-      // cars[i]["model"] = carModel;
-      // cars[i]["year"] = carYear;
-      // cars[i]["con"] = carCon;
-      // cars[i]["cost"] = carCost;
-      // cars[i]["avail"] = avail;
-
-      // std::ofstream jsonOutput("cars.json");
-      // jsonOutput << std::setw(4) << carID << std::endl;
-      // jsonOutput.close();
-
-      isFound = true;
     }
   }
 
@@ -367,10 +370,143 @@ void updateCar(int carID){
   updateCar(carID);
 }
 
-// bool deleteCar(int carID){}
-// void checkCar(int carID){}
-// bool rentCar(int carID){}
-// bool modCost(int carID, int newCost){}
+void deleteCar(int carID){
+  json cars, newCars;
+  int numOfCars, tempID, newCarID;
+  bool isFound;
+
+  isFound = false;
+  cars = listCars();
+  numOfCars = cars.size();
+
+  if(carID > (numOfCars - 1)){
+    std::cout << "ERROR: Car ID is not listed. Please try again.\n" << std::endl;
+    std::cout << "What is the car ID you want to delete: ";
+    std::cin >> newCarID;
+    std::cout << "\n";
+    
+    if(std::cin.fail()){
+      std::cout << "Invalid car ID. \n" << std::endl;
+      std::cin.clear();
+      std::cin.ignore(10000, '\n');
+      return;
+    } else if (newCarID < 0){
+      std::cout << "Cannot accept input. \n" << std::endl;
+      return;
+    }
+
+    deleteCar(newCarID);
+    return;
+  }
+
+  for(int i = 0; i < numOfCars; i++){
+    if(isFound){
+      cars[i]["carID"] = tempID;
+      tempID++;
+    }
+    if((cars[i]["carID"] == carID) && !isFound){
+      isFound = true;
+      tempID = carID;
+    }
+  }
+
+  cars.erase(cars.begin() + carID);
+
+  updateCarsJSON(cars);
+
+  std::cout << "Car Deleted.\n" << std::endl;
+}
+
+void listAllCars(){
+  json cars;
+  int numOfCars;
+
+  cars = listCars();
+  numOfCars = cars.size();
+  
+  std::cout << "------------\tAll Car Info\t------------\n" << std::endl;
+
+  for(int i = 0; i < numOfCars; i++){
+    std::cout << "Available : " << cars[i]["avail"] << std::endl;
+    std::cout << "Car ID : " << cars[i]["carID"] << std::endl;
+    std::cout << "Car Condition : " << cars[i]["con"] << std::endl;
+    std::cout << "Car Cost : " << cars[i]["cost"] << std::endl;
+    std::cout << "Car Model : " << cars[i]["model"] << std::endl;
+    std::cout << "Car Year : " << cars[i]["year"] << std::endl;
+    std::cout << std::endl;
+  } 
+}
+
+void checkCar(int carID){
+  json cars;
+  int numOfCars;
+
+  cars = listCars();
+  numOfCars = cars.size();
+
+  std::cout << "------------\tCar Info\t------------\n" << std::endl;
+
+  if(carID < (numOfCars)){
+    for(int i = 0; i < numOfCars; i++){
+      if(cars[i]["carID"] == carID){
+        std::cout << "Available : " << cars[i]["avail"] << std::endl;
+        std::cout << "Car ID : " << cars[i]["carID"] << std::endl;
+        std::cout << "Car Condition : " << cars[i]["con"] << std::endl;
+        std::cout << "Car Cost : " << cars[i]["cost"] << std::endl;
+        std::cout << "Car Model : " << cars[i]["model"] << std::endl;
+        std::cout << "Car Year : " << cars[i]["year"] << std::endl;
+      }
+    }
+  }
+
+  std::cout << std::endl;
+}
+
+void rentCar(int carID){
+  json cars;
+  int numOfCars;
+
+  cars = listCars();
+  numOfCars = cars.size();
+
+  for(int i = 0; i < numOfCars; i++){
+    if(cars[i]["carID"] == carID){
+      if(cars[i]["avail"]){
+        cars[i]["avail"] = false;
+      } else {
+        std::cout << "ERROR: Car is already taken!\n" << std::endl;
+        return;
+      }
+    }
+  }
+
+  updateCarsJSON(cars);
+
+  std::cout << "Car rented.\n" << std::endl;
+}
+
+void returnCar(int carID){
+  json cars;
+  int numOfCars;
+
+  cars = listCars();
+  numOfCars = cars.size();
+
+  for(int i = 0; i < numOfCars; i++){
+    if(cars[i]["carID"] == carID){
+      if(!cars[i]["avail"]){
+        cars[i]["avail"] = true;
+      } else {
+        std::cout << "ERROR: Car is already returned!\n" << std::endl;
+        return;
+      }
+    }
+  }
+
+  updateCarsJSON(cars);
+
+  std::cout << "Car returned.\n" << std::endl;
+}
 
 int main() {
   int choice = menu();
@@ -392,13 +528,84 @@ int main() {
         std::cin.clear();
         std::cin.ignore(10000, '\n');
         break;
-      } else if (carChoice < 0){
+      } else if (carChoice < 0 || carChoice > INT_MAX){
         std::cout << "Cannot accept input. \n" << std::endl;
         break;
       }
 
       updateCar(carChoice);
       break;
+    case 3:
+      std::cout << "What is the car ID you want to delete: ";
+      std::cin >> carChoice;
+      std::cout << "\n";
+      
+      if(std::cin.fail()){
+        std::cout << "Invalid car ID. \n" << std::endl;
+        std::cin.clear();
+        std::cin.ignore(10000, '\n');
+        break;
+      } else if (carChoice < 0 || carChoice > INT_MAX){
+        std::cout << "Cannot accept input. \n" << std::endl;
+        break;
+      }
+
+      deleteCar(carChoice);
+      break;
+    case 4:
+      listAllCars();
+      break;
+    case 5:
+      std::cout << "What is the car ID you want to check: ";
+      std::cin >> carChoice;
+      std::cout << "\n";
+
+      if(std::cin.fail()){
+        std::cout << "Invalid car ID. \n" << std::endl;
+        std::cin.clear();
+        std::cin.ignore(10000, '\n');
+        break;
+      } else if (carChoice < 0 || carChoice > INT_MAX){
+        std::cout << "Cannot accept input. \n" << std::endl;
+        break;
+      }
+
+      checkCar(carChoice);
+      break;
+    case 6:
+      std::cout << "What car ID do you want to rent: ";
+      std::cin >> carChoice;
+      std::cout << "\n";
+
+      if(std::cin.fail()){
+        std::cout << "Invalid car ID. \n" << std::endl;
+        std::cin.clear();
+        std::cin.ignore(10000, '\n');
+        break;
+      } else if (carChoice < 0 || carChoice > INT_MAX){
+        std::cout << "Cannot accept input. \n" << std::endl;
+        break;
+      }
+
+      rentCar(carChoice);
+      break;
+    case 7:
+      std::cout << "What car ID do you want to return: ";
+      std::cin >> carChoice;
+      std::cout << "\n";
+
+      if(std::cin.fail()){
+        std::cout << "Invalid car ID. \n" << std::endl;
+        std::cin.clear();
+        std::cin.ignore(10000, '\n');
+        break;
+      } else if (carChoice < 0 || carChoice > INT_MAX){
+        std::cout << "Cannot accept input. \n" << std::endl;
+        break;
+      }
+
+      returnCar(carChoice);
+      break;    
     case 8:
       std::cout << "Exiting Program" << std::endl;
       exit(0);
