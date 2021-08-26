@@ -1,0 +1,66 @@
+[
+    {
+        "avail": true,
+        "carID": 0,
+        "con": true,
+        "cost": 13000,
+        "model": "toyota",
+        "year": 1993
+    },
+    {
+        "avail": true,
+        "carID": 1,
+        "con": true,
+        "cost": 13000,
+        "model": "subaru",
+        "year": 1997
+    },
+    {
+        "avail": true,
+        "carID": 2,
+        "con": true,
+        "cost": 15000,
+        "model": "honda",
+        "year": 1998
+    },
+    {
+        "avail": true,
+        "carID": 3,
+        "con": false,
+        "cost": 17500,
+        "model": "subaru",
+        "year": 2005
+    },
+    {
+        "avail": true,
+        "carID": 4,
+        "con": true,
+        "cost": 17500,
+        "model": "toyota",
+        "year": 2010
+    },
+    {
+        "avail": true,
+        "carID": 5,
+        "con": true,
+        "cost": 16000,
+        "model": "honda",
+        "year": 2009
+    },
+    {
+        "avail": true,
+        "carID": 6,
+        "con": false,
+        "cost": 7000,
+        "model": "subaru",
+        "year": 1992
+    },
+    {
+        "avail": false,
+        "carID": 7,
+        "con": false,
+        "cost": 45000,
+        "model": "toyota",
+        "year": 2020
+    }
+]
